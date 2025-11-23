@@ -1,7 +1,6 @@
-📦 Sistema de Vendas
+# Sistema de Vendas
 
 Um sistema de gerenciamento de vendas desenvolvido em Python com integração ao SQL Server, utilizando Programação Orientada a Objetos (POO) e @property para demonstrar boas práticas de desenvolvimento.
-
 
 ---
 
@@ -17,8 +16,6 @@ Uso de @property e encapsulamento
 
 Criação de sistemas de vendas
 
-
-
 ---
 
 🛠️ Tecnologias Utilizadas
@@ -33,9 +30,6 @@ pyodbc - Conexão com SQL Server
 
 faker - Geração de dados fictícios
 
-
-
-
 ---
 
 📋 Funcionalidades
@@ -48,7 +42,6 @@ Visualizar histórico de compras
 
 Calcular total gasto por cliente
 
-
 ✅ Gerenciamento de Produtos
 
 Listar produtos
@@ -56,7 +49,6 @@ Listar produtos
 Controlar estoque
 
 Validar disponibilidade
-
 
 ✅ Criar Vendas
 
@@ -68,7 +60,6 @@ Atualizar estoque automaticamente
 
 Gerar resumo da venda
 
-
 ✅ Relatórios
 
 Produtos mais vendidos
@@ -76,8 +67,6 @@ Produtos mais vendidos
 Clientes top (maior gasto)
 
 Vendas por mês
-
-
 
 ---
 
@@ -95,7 +84,6 @@ SistemaVendas/
 ├── sistema_vendas.py            # (Opcional) Todas as classes juntas
 └── README.md                    # Este arquivo
 
-
 ---
 
 🚀 Como Usar
@@ -108,8 +96,7 @@ SQL Server instalado e rodando
 
 Visual Studio Code ou editor de texto
 
-
-2. Instalação
+2.Instalação
 
 Clone ou baixe o projeto:
 
@@ -120,7 +107,7 @@ Instale as dependências:
 
 pip install pyodbc faker
 
-3. Configurar Banco de Dados
+3.Configurar Banco de Dados
 
 Execute o script SQL para criar o banco:
 
@@ -130,15 +117,14 @@ USE SistemaVendas;
 GO
 -- Criar tabelas conforme necessário
 
-4. Gerar Dados Fictícios
+4.Gerar Dados Fictícios
 
 python gerar_dados_fake.py
 python gerar_produtos_fake.py
 
-5. Executar o Sistema
+5.Executar o Sistema
 
 python main.py
-
 
 ---
 
@@ -158,7 +144,6 @@ SISTEMA DE VENDAS
 5. Sair
 ==================================================
 
-
 ---
 
 🏗️ Arquitetura das Classes
@@ -171,7 +156,6 @@ Executa queries
 
 Valida conexão
 
-
 Produto
 
 Representa um produto
@@ -180,7 +164,6 @@ Controla estoque
 
 Valida disponibilidade
 
-
 Cliente
 
 Representa um cliente
@@ -188,8 +171,6 @@ Representa um cliente
 Armazena histórico de compras
 
 Calcula total gasto
-
-
 Venda
 
 Representa uma venda
@@ -198,14 +179,11 @@ Adiciona itens
 
 Atualiza estoque gera resumo formatado
 
-
 RelatorioVendas
 
 Consulta banco
 
 Gera relatórios de vendas
-
-
 
 ---
 
@@ -223,8 +201,6 @@ Type hints
 
 Tratamento de erros
 
-
-
 ---
 
 📊 Dados do Banco
@@ -234,8 +210,6 @@ Tratamento de erros
 20 produtos
 
 Estrutura preparada para vendas
-
-
 
 ---
 
@@ -249,11 +223,9 @@ Confirme nome do servidor
 
 Confirme nome do banco
 
-
 "pyodbc not found"
 
 pip install --upgrade pyodbc faker
-
 
 ---
 
@@ -271,14 +243,11 @@ Testes unitários
 
 Deploy com Django/Flask
 
-
-
 ---
 
 👨‍💻 Autor
 
 Desenvolvido como projeto de portfólio para demonstrar conhecimentos em Python e SQL Server.
-
 
 ---
 
@@ -287,17 +256,14 @@ Desenvolvido como projeto de portfólio para demonstrar conhecimentos em Python 
 📱 WhatsApp: 11 98858-2267
 📧 Email: dougintelectual@hotmail.com
 
-
 ---
 
 📝 Licença
 
 Projeto aberto para uso educacional e estudos.
 
-
 ---
 
 Desenvolvido com ❤️ em Python
-
 
 Enviado do meu Galaxy
