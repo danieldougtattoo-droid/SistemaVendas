@@ -100,8 +100,12 @@ Visual Studio Code ou editor de texto
 
 Clone ou baixe o projeto:
 
-git clone https://github.com/seu-usuario/SistemaVendas.git
+```bash
+git clone
+https://github.com/danieldougtattoo-droid
+/SistemaVendas.git
 cd SistemaVendas
+````
 
 Instale as dependências:
 
@@ -126,25 +130,19 @@ python gerar_produtos_fake.py
 
 python main.py
 
----
-
 💡 Como Funciona
 
 Menu Principal
 
 Ao executar main.py, aparecerá um menu como:
 
-==================================================
-SISTEMA DE VENDAS
-==================================================
+## SISTEMA DE VENDAS
+
 1. Criar uma venda
 2. Ver relatórios
 3. Listar clientes
 4. Listar produtos
 5. Sair
-==================================================
-
----
 
 🏗️ Arquitetura das Classes
 
@@ -254,7 +252,7 @@ Desenvolvido como projeto de portfólio para demonstrar conhecimentos em Python 
 📞 Contato
 
 📱 WhatsApp: 11 98858-2267
-📧 Email: dougintelectual@hotmail.com
+📧 Email:dougintelectual@hotmail.com
 
 ---
 
