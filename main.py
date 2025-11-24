@@ -97,7 +97,7 @@ def criar_venda(db, clientes, produtos):
         venda.adicionar_item(produto_selecionado, quantidade)
 
     # Finalizar venda
-    if venda.finalizar_venda():
+    if venda.finalizar_venda(db):
         venda.exibir_resumo()
 
 def exibir_relatorios(db):
@@ -170,6 +170,13 @@ def main():
     if not db.conectar():
         print("Erro ao conectar ao banco de dados!")
         return
+
+    # Verificar tabelas disponíveis (temporário para debug)
+    print("\n=== TABELAS DISPONÍVEIS NO BANCO ===")
+    tabelas = db.listar_tabelas()
+    for tabela in tabelas:
+        print(f"  - {tabela}")
+    print("=====================================\n")
 
     # Buscar dados
     clientes = buscar_clientes(db)

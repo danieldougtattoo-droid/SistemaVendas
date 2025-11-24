@@ -13,7 +13,7 @@ class RelatorioVendas:
              MONTH(data_venda) as mes,
              COUNT(*) as total_vendas,
              SUM(valor_total) as valor_total
-        FROM Vendas
+        FROM [Vendas]
         GROUP BY MONTH(data_venda)
         ORDER BY mes
         """
@@ -25,10 +25,10 @@ class RelatorioVendas:
         query = """
         SELECT TOP 5
             p.nome,
-            SUM(iv.quantidade) as quantidade_total,
-            SUM(iv.quantidade * iv.preco_unitario) as valor_total
-        FROM ItemVenda iv
-        JOIN Produtos p ON iv.produto_id = p.id
+            COUNT(iv.id) as quantidade_total,
+            SUM(iv.preco_unitario) as valor_total
+        FROM [ItensVendas] iv
+        JOIN [Produtos] p ON iv.produto_id = p.id
         GROUP BY p.nome
         ORDER BY quantidade_total DESC
         """
@@ -43,8 +43,8 @@ class RelatorioVendas:
             c.nome,
             COUNT(v.id) as total_compras,
             SUM(v.valor_total) as valor_total
-        FROM Clientes c
-        JOIN Vendas v ON c.id = v.cliente_id
+        FROM [Clientes] c
+        JOIN [Vendas] v ON c.id = v.cliente_id
         GROUP BY c.nome
         ORDER BY valor_total DESC
         """

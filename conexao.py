@@ -65,15 +65,74 @@ class ConexaoBancoDados:
     
     def listar_tabelas(self):
         """Lista todas as tabelas do banco de dados"""
-        query = """
-        SELECT TABLE_NAME 
-        FROM INFORMATION_SCHEMA.TABLES 
-        WHERE TABLE_TYPE = 'BASE TABLE'
-        ORDER BY TABLE_NAME
-        """
-        cursor = self.executar_query(query)
-        if cursor:
-            return [row[0] for row in cursor.fetchall()]
-        return []
+        try:
+            query = """
+            SELECT TABLE_NAME 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_TYPE = 'BASE TABLE'
+            ORDER BY TABLE_NAME
+            """
+            cursor = self._conexao.cursor()
+            cursor.execute(query)
+            tabelas = [row[0] for row in cursor.fetchall()]
+            cursor.close()
+            return tabelas
+        except Exception as e:
+            print(f"Erro ao listar tabelas: {e}")
+            return []
+    
+    def tabela_existe(self, nome_tabela):
+        """Verifica se uma tabela existe no banco de dados"""
+        try:
+            query = """
+            SELECT COUNT(*) 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_NAME = ?
+            """
+            cursor = self._conexao.cursor()
+            cursor.execute(query, (nome_tabela,))
+            resultado = cursor.fetchone()[0]
+            cursor.close()
+            return resultado > 0
+        except Exception as e:
+            print(f"Erro ao verificar tabela: {e}")
+            return False
+    
+    def buscar_tabelas_similares(self, termo):
+        """Busca tabelas que contenham o termo no nome"""
+        try:
+            query = """
+            SELECT TABLE_NAME 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_TYPE = 'BASE TABLE'
+            AND (TABLE_NAME LIKE ? OR TABLE_NAME LIKE ?)
+            ORDER BY TABLE_NAME
+            """
+            cursor = self._conexao.cursor()
+            cursor.execute(query, (f'%{termo}%', f'%{termo.lower()}%'))
+            tabelas = [row[0] for row in cursor.fetchall()]
+            cursor.close()
+            return tabelas
+        except Exception as e:
+            print(f"Erro ao buscar tabelas similares: {e}")
+            return []
+    
+    def listar_colunas_tabela(self, nome_tabela):
+        """Lista as colunas de uma tabela"""
+        try:
+            query = """
+            SELECT COLUMN_NAME, DATA_TYPE 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_NAME = ?
+            ORDER BY ORDINAL_POSITION
+            """
+            cursor = self._conexao.cursor()
+            cursor.execute(query, (nome_tabela,))
+            colunas = [(row[0], row[1]) for row in cursor.fetchall()]
+            cursor.close()
+            return colunas
+        except Exception as e:
+            print(f"Erro ao listar colunas: {e}")
+            return []
 
 
