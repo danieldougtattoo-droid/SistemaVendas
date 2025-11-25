@@ -30,6 +30,8 @@ pyodbc - Conexão com SQL Server
 
 faker - Geração de dados fictícios
 
+Gradio e Panda
+
 ---
 
 📋 Funcionalidades
