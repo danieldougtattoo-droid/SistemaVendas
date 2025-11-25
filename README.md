@@ -266,4 +266,3 @@ Projeto aberto para uso educacional e estudos.
 
 Desenvolvido com ❤️ em Python
 
-Enviado do meu Galaxy
