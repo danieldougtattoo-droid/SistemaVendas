@@ -14,11 +14,17 @@ db.conectar()
 venda_atual = None
 cliente_selecionado = None
 
+def carregar_dashboard():
+    relatorio = RelatorioVendas(db)
+    figura = relatorio.gerar_grafico_produtos()
+    return figura
+
+
 def buscar_clientes():
     """Busca clientes do banco"""
     query = "SELECT id, nome, email FROM Clientes"
     cursor = db.executar_query(query)
-   
+
     if cursor:
         clientes = cursor.fetchall()
         return [(f"{c[1]} - {c[2]}", c[0]) for c in clientes]
@@ -28,7 +34,7 @@ def buscar_produtos():
     """Busca produtos do banco"""
     query = "SELECT id, nome, preco, estoque FROM Produtos"
     cursor = db.executar_query(query)
-   
+
     if cursor:
         produtos = cursor.fetchall()
         return [(f"{p[1]} - R${p[2]:.2f} (Estoque: {p[3]})", p[0]) for p in produtos]
@@ -111,7 +117,7 @@ def listar_produtos_df():
 def iniciar_venda(cliente_nome):
     """Inicia uma nova venda"""
     global venda_atual, cliente_selecionado
-   
+
     if not cliente_nome:
         return "❌ Selecione um cliente!", "", gr.update(visible=False)
    
@@ -123,7 +129,7 @@ def iniciar_venda(cliente_nome):
         query = "SELECT id, nome, email, telefone FROM Clientes WHERE nome = ?"
         nome_limpo = cliente_nome.split(" - ")[0]
         cursor = db.executar_query(query, (nome_limpo,))
-       
+
         if cursor:
             cliente_data = cursor.fetchone()
             if cliente_data:
@@ -140,7 +146,7 @@ def iniciar_venda(cliente_nome):
 def adicionar_item_venda(produto_nome, quantidade):
     """Adiciona item à venda"""
     global venda_atual
-   
+
     if not venda_atual:
         return "❌ Inicie uma venda primeiro!", ""
    
@@ -164,7 +170,7 @@ def adicionar_item_venda(produto_nome, quantidade):
 def exibir_resumo_venda():
     """Exibe resumo da venda atual"""
     global venda_atual
-   
+
     if not venda_atual or len(venda_atual.itens) == 0:
         return "Nenhum item na venda"
    
@@ -181,7 +187,7 @@ def exibir_resumo_venda():
 def finalizar_venda_atual():
     """Finaliza a venda"""
     global venda_atual, cliente_selecionado
-   
+
     if not venda_atual:
         return "❌ Nenhuma venda em andamento!", "", gr.update(visible=False)
    
@@ -196,7 +202,7 @@ def finalizar_venda_atual():
 def cancelar_venda_atual():
     """Cancela a venda"""
     global venda_atual, cliente_selecionado
-   
+
     venda_atual = None
     cliente_selecionado = None
    
@@ -228,16 +234,23 @@ def obter_relatorio_clientes():
 
 # Interface Gradio
 with gr.Blocks(title="Sistema de Vendas") as app:
-   
+
     gr.Markdown("# 🛒 Sistema de Vendas")
     gr.Markdown("Sistema de gerenciamento de vendas com Python e SQL Server")
    
     with gr.Tabs():
-       
-        # ABA 1: Criar Venda
+
+        # ABA 1: Dashboard de Performance
+        with gr.Tab("📈 Dashboard de Performance"):
+            gr.Markdown("### Análise em tempo real (SQL + Pandas + Plotly)")
+            btn_atualizar = gr.Button("Atualizar Indicadores", variant="primary")
+            output_plot = gr.Plot(label="Top 5 Produtos por Faturamento")
+            btn_atualizar.click(carregar_dashboard, outputs=[output_plot])
+
+        # ABA 2: Criar Venda
         with gr.Tab("🛍️ Criar Venda"):
             gr.Markdown("### Iniciar Nova Venda")
-           
+
             with gr.Row():
                 cliente_dropdown = gr.Dropdown(
                     choices=[c[0] for c in buscar_clientes()],
@@ -245,12 +258,12 @@ with gr.Blocks(title="Sistema de Vendas") as app:
                     interactive=True
                 )
                 btn_iniciar = gr.Button("Iniciar Venda", variant="primary")
-           
+
             msg_inicio = gr.Markdown("")
-           
+
             with gr.Column(visible=False) as col_itens:
                 gr.Markdown("### Adicionar Produtos")
-               
+
                 with gr.Row():
                     produto_dropdown = gr.Dropdown(
                         choices=[p[0] for p in buscar_produtos()],
@@ -263,76 +276,76 @@ with gr.Blocks(title="Sistema de Vendas") as app:
                         minimum=1
                     )
                     btn_adicionar = gr.Button("Adicionar Item", variant="secondary")
-               
+
                 msg_item = gr.Markdown("")
-               
+
                 gr.Markdown("### Resumo da Venda")
                 resumo_venda = gr.Markdown("")
-               
+
                 with gr.Row():
                     btn_finalizar = gr.Button("✅ Finalizar Venda", variant="primary")
                     btn_cancelar = gr.Button("❌ Cancelar Venda", variant="stop")
-           
+
             # Eventos
             btn_iniciar.click(
                 iniciar_venda,
                 inputs=[cliente_dropdown],
                 outputs=[msg_inicio, resumo_venda, col_itens]
             )
-           
+
             btn_adicionar.click(
                 adicionar_item_venda,
                 inputs=[produto_dropdown, quantidade_input],
                 outputs=[msg_item, resumo_venda]
             )
-           
+
             btn_finalizar.click(
                 finalizar_venda_atual,
                 outputs=[msg_inicio, resumo_venda, col_itens]
             )
-           
+
             btn_cancelar.click(
                 cancelar_venda_atual,
                 outputs=[msg_inicio, resumo_venda, col_itens]
             )
-       
-        # ABA 2: Relatórios
+
+        # ABA 3: Relatórios
         with gr.Tab("📊 Relatórios"):
             gr.Markdown("### Relatórios de Vendas")
-           
+
             with gr.Row():
                 btn_rel_produtos = gr.Button("🏆 Produtos Mais Vendidos")
                 btn_rel_clientes = gr.Button("👥 Clientes Top")
            
             tabela_relatorio = gr.DataFrame(label="Resultados")
-           
+
             btn_rel_produtos.click(
                 obter_relatorio_produtos,
                 outputs=[tabela_relatorio]
             )
-           
+
             btn_rel_clientes.click(
                 obter_relatorio_clientes,
                 outputs=[tabela_relatorio]
             )
-       
-        # ABA 3: Listar Clientes
+
+        # ABA 4: Listar Clientes
         with gr.Tab("👥 Clientes"):
             gr.Markdown("### Lista de Clientes")
             btn_listar_clientes = gr.Button("Atualizar Lista")
             tabela_clientes = gr.DataFrame(value=listar_clientes_df(), label="Clientes")
-           
+
             btn_listar_clientes.click(
                 listar_clientes_df,
                 outputs=[tabela_clientes]
             )
-       
-        # ABA 4: Listar Produtos
+
+        # ABA 5: Listar Produtos
         with gr.Tab("📦 Produtos"):
             gr.Markdown("### Lista de Produtos")
             btn_listar_produtos = gr.Button("Atualizar Lista")
             tabela_produtos = gr.DataFrame(value=listar_produtos_df(), label="Produtos")
-           
+
             btn_listar_produtos.click(
                 listar_produtos_df,
                 outputs=[tabela_produtos]

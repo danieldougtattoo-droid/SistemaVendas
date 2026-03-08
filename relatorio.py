@@ -1,3 +1,6 @@
+import pandas as pd
+import plotly.express as px
+import sqlite3
 from conexao import ConexaoBancoDados
 
 
@@ -20,6 +23,16 @@ class RelatorioVendas:
 
         cursor = self._conexao_db.executar_query(query)
         return cursor.fetchall() if cursor else []
+
+    def gerar_grafico_produtos(self):
+        dados = self.produtos_mais_vendidos()
+        if not dados:
+            return None
+        dados_lista = [list(row) for row in dados]
+        df = pd.DataFrame(dados_lista, columns=['Produto', 'Quantidade', 'valor_total'])
+        fig = px.bar(df, x='Produto', y='valor_total', text='Quantidade', title='Top 5 Produtos por Faturamento',
+        template='plotly_white')
+        return fig
 
     def produtos_mais_vendidos(self):
         query = """
@@ -52,8 +65,9 @@ class RelatorioVendas:
         cursor = self._conexao_db.executar_query(query)
         return cursor.fetchall() if cursor else []
 
-        # Exemplo de sistema
-        if __name__ == "__main__":
-            # Conectar ao banco
-            db = ConexaoBancoDados(r"DOUGTATTOO\SQLEXPRESS", "SistemaVendas")
-            db.conectar()
+
+# Exemplo de sistema
+if __name__ == "__main__":
+    # Conectar ao banco
+    db = ConexaoBancoDados(r"DOUGTATTOO\SQLEXPRESS", "SistemaVendas")
+    db.conectar()
