@@ -1,6 +1,5 @@
 import pandas as pd
 import plotly.express as px
-import sqlite3
 from conexao import ConexaoBancoDados
 
 
@@ -24,6 +23,17 @@ class RelatorioVendas:
         cursor = self._conexao_db.executar_query(query)
         return cursor.fetchall() if cursor else []
 
+    def grafico_clientes_top(self):
+        dados = self.clientes_top()
+        if not dados:
+            return None
+        
+        dados_lista = [list(row) for row in dados]
+        df = pd.DataFrame(dados_lista, columns=['Cliente', 'Quantidade', 'Valor Total'])
+        fig = px.pie(df, values='Valor Total', names='Cliente', title='Participação por Clientes(Faturamento)',
+                     hole=0.4, template='plotly_dark')
+        return fig
+
     def gerar_grafico_produtos(self):
         dados = self.produtos_mais_vendidos()
         if not dados:
@@ -31,7 +41,7 @@ class RelatorioVendas:
         dados_lista = [list(row) for row in dados]
         df = pd.DataFrame(dados_lista, columns=['Produto', 'Quantidade', 'valor_total'])
         fig = px.bar(df, x='Produto', y='valor_total', text='Quantidade', title='Top 5 Produtos por Faturamento',
-        template='plotly_white')
+                     template='plotly_white')
         return fig
 
     def produtos_mais_vendidos(self):
@@ -64,6 +74,13 @@ class RelatorioVendas:
         
         cursor = self._conexao_db.executar_query(query)
         return cursor.fetchall() if cursor else []
+
+    def exportar_vendas_excel(self):
+        query = "SELECT * FROM Vendas"
+        df = pd.read_sql_query(query, self._conexao_db.conexao)
+        caminho_arquivo = "relatorio_vendas.xlsx"
+        df.to_excel(caminho_arquivo, index=False)
+        return caminho_arquivo
 
 
 # Exemplo de sistema

@@ -10,6 +10,9 @@ from relatorio import RelatorioVendas
 db = ConexaoBancoDados(r"DOUGTATTOO\SQLEXPRESS", "SistemaVendas")
 db.conectar()
 
+# Instância global de relatório
+relatorio = RelatorioVendas(db)
+
 # Variável global para armazenar venda em andamento
 venda_atual = None
 cliente_selecionado = None
@@ -232,6 +235,9 @@ def obter_relatorio_clientes():
    
     return pd.DataFrame(columns=['Cliente', 'Compras', 'Valor Total'])
 
+def limpar_campos_venda():
+    # Retorna: Cliente (none), Produto (none), Quantidade (1), Mensagem ("")
+    return gr.update(value=None), gr.update(value=None), gr.update(value=1), ""
 # Interface Gradio
 with gr.Blocks(title="Sistema de Vendas") as app:
 
@@ -245,7 +251,13 @@ with gr.Blocks(title="Sistema de Vendas") as app:
             gr.Markdown("### Análise em tempo real (SQL + Pandas + Plotly)")
             btn_atualizar = gr.Button("Atualizar Indicadores", variant="primary")
             output_plot = gr.Plot(label="Top 5 Produtos por Faturamento")
+            with gr.Row():
+                btn_excel = gr.Button("Exportar tudo (Excel)", variant="secondary")
+                file_download = gr.File(label="Arquivo Gerado")
+            # Eventos Click
             btn_atualizar.click(carregar_dashboard, outputs=[output_plot])
+            btn_excel.click(relatorio.exportar_vendas_excel, outputs=[file_download])
+            
 
         # ABA 2: Criar Venda
         with gr.Tab("🛍️ Criar Venda"):
@@ -302,14 +314,30 @@ with gr.Blocks(title="Sistema de Vendas") as app:
             btn_finalizar.click(
                 finalizar_venda_atual,
                 outputs=[msg_inicio, resumo_venda, col_itens]
-            )
+            ).then(# <--- Isso acontece quando a venda é finalizada
+            fn=limpar_campos_venda,
+            outputs=[cliente_dropdown, produto_dropdown, quantidade_input,msg_inicio])
 
             btn_cancelar.click(
                 cancelar_venda_atual,
                 outputs=[msg_inicio, resumo_venda, col_itens]
+            ).then(
+                fn=limpar_campos_venda,
+                outputs=[cliente_dropdown, produto_dropdown, quantidade_input,msg_inicio]
             )
 
-        # ABA 3: Relatórios
+        # ABA 3: Análise de Clientes
+        with gr.Tab("📊 Perfil dos Clientes"):
+            gr.Markdown("### Participação de Clientes no Faturamento")
+            with gr.Row():
+                output_pizza = gr.Plot(label="Market Share por Clientes")
+            btn_atualizar_clientes = gr.Button("Gerar Análise de Clientes", variant="primary")
+            btn_atualizar_clientes.click(
+                fn=relatorio.grafico_clientes_top,
+                outputs=output_pizza
+            )
+
+        # ABA 4: Relatórios
         with gr.Tab("📊 Relatórios"):
             gr.Markdown("### Relatórios de Vendas")
 
@@ -329,7 +357,7 @@ with gr.Blocks(title="Sistema de Vendas") as app:
                 outputs=[tabela_relatorio]
             )
 
-        # ABA 4: Listar Clientes
+        # ABA 5: Listar Clientes
         with gr.Tab("👥 Clientes"):
             gr.Markdown("### Lista de Clientes")
             btn_listar_clientes = gr.Button("Atualizar Lista")
@@ -340,7 +368,7 @@ with gr.Blocks(title="Sistema de Vendas") as app:
                 outputs=[tabela_clientes]
             )
 
-        # ABA 5: Listar Produtos
+        # ABA 6: Listar Produtos
         with gr.Tab("📦 Produtos"):
             gr.Markdown("### Lista de Produtos")
             btn_listar_produtos = gr.Button("Atualizar Lista")
