@@ -233,17 +233,17 @@ O sistema transforma dados brutos em inteligência visual:
 ---# 1. Volume de Vendas por Produto
 Identifica itens com maior saída para controle de estoque.
 
-![Gráfico de Barras](docs/images/indicadores.jpg)
+![Gráfico de Barras](https://github.com/danieldougtattoo-droid/SistemaVendas/raw/main/docs/images/indicadores.jpg)
 
 ---#### 2. Market Share (Participação por Cliente)
 Análise detalhada da concentração de faturamento.
 
-![Gráfico de Pizza](docs/images/pizza.jpg)
+![Gráfico de Pizza](https://github.com/danieldougtattoo-droid/SistemaVendas/raw/main/docs/images/pizza.jpg)
 
 ---#### 3. Gestão de Dados e Relatórios
 Exportação e organização de dados via Excel.
 
-![Relatório Excel](docs/images/Execel.jpg)
+![Relatório Excel](https://github.com/danieldougtattoo-droid/SistemaVendas/raw/main/docs/images/Execel.jpg)
 
 ​Além da visualização, o sistema garante a integridade e a portabilidade das informações:
 
