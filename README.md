@@ -235,16 +235,20 @@ Dashboard de Performance (BI)
 ​1. Volume de Vendas por Produto (Desempenho)
 
 ​Identifica instantaneamente quais itens possuem maior saída, permitindo um controle de estoque e marketing mais eficiente.
+![Gráfico de Barras]
+(indicadores.jpg)
 
 ​2. Market Share (Participação por Cliente)
 
 ​Análise detalhada da concentração de faturamento por cliente, facilitando a identificação dos parceiros mais estratégicos.
+![Gráfico de pizza](pizza.jpg)
 
 ​📑 Gestão de Dados e Relatórios
 ​Além da visualização, o sistema garante a integridade e a portabilidade das informações:
 
 ​Persistência em SQL Server: Registro em tempo real via pyodbc.
 ​Exportação para Excel: Geração automática de relatórios formatados para auditoria e análise offline.
+![Relatório Excel](Execel.jpg)
 ​🛠️ Tecnologias Utilizadas
 ​Interface: Gradio (Web UI)
 ​Banco de Dados: Microsoft SQL Server
@@ -256,22 +260,6 @@ Dashboard de Performance (BI)
 ​Instale as dependências: pip install -r requirements.txt.
 ​Verifique a string de conexão no arquivo conexao.py.
 ​Execute o comando: python app_gradio.py.
-
-📈 Próximas Melhorias
-
-Persistir vendas no banco
-
-Adicionar autenticação
-
-Interface gráfica
-
-Relatórios em PDF
-
-Testes unitários
-
-Deploy com Django/Flask
-
----
 
 👨‍💻 Autor
 
