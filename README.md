@@ -227,28 +227,28 @@ Confirme nome do banco
 
 pip install --upgrade pyodbc faker
 
----
+---### 📊 Dashboard de Performance (BI)
 
-Dashboard de Performance (BI)
-​O sistema transforma dados brutos em inteligência visual para facilitar a tomada de decisão:
+O sistema transforma dados brutos em inteligência visual:
+---# 1. Volume de Vendas por Produto
+Identifica itens com maior saída para controle de estoque.
 
-​1. Volume de Vendas por Produto (Desempenho)
+![Gráfico de Barras](indicadores.jpg)
 
-​Identifica instantaneamente quais itens possuem maior saída, permitindo um controle de estoque e marketing mais eficiente.
-![Gráfico de Barras]
-(indicadores.jpg)
+---#### 2. Market Share (Participação por Cliente)
+Análise detalhada da concentração de faturamento.
 
-​2. Market Share (Participação por Cliente)
+![Gráfico de Pizza](pizza.jpg)
 
-​Análise detalhada da concentração de faturamento por cliente, facilitando a identificação dos parceiros mais estratégicos.
-![Gráfico de pizza](pizza.jpg)
+---#### 3. Gestão de Dados e Relatórios
+Exportação e organização de dados via Excel.
 
-​📑 Gestão de Dados e Relatórios
+![Relatório Excel](Execel.jpg)
+
 ​Além da visualização, o sistema garante a integridade e a portabilidade das informações:
 
 ​Persistência em SQL Server: Registro em tempo real via pyodbc.
 ​Exportação para Excel: Geração automática de relatórios formatados para auditoria e análise offline.
-![Relatório Excel](Execel.jpg)
 ​🛠️ Tecnologias Utilizadas
 ​Interface: Gradio (Web UI)
 ​Banco de Dados: Microsoft SQL Server
